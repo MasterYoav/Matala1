@@ -15,28 +15,32 @@ int main() {
         printf("Please enter positive integers.\n");
         return 1; // Exit with an error code
     }
-
-
-    // Print prime numbers
-    printf("Prime numbers between %d and %d:\n", num1, num2);
-    for (int i = num1; i <= num2; i++) {
-        if (isPrime(i)) {
-            printf("%d ", i);
-        }
-    }
-    printf("\n");
-
     // Print Armstrong numbers
-    printf("Armstrong numbers between %d and %d:\n", num1, num2);
+    printf("The Armstrong numbers are: ");
     for (int i = num1; i <= num2; i++) {
         if (isArmstrong(i)) {
             printf("%d ", i);
         }
     }
     printf("\n");
-
+`   // Print palindromic numbers
+    printf("The Palindromes are: ");
+    for (int i = num1; i <= num2; i++) {
+        if (isPalindrome(i)) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+    // Print prime numbers
+    printf("The Prime numbers are: ");
+    for (int i = num1; i <= num2; i++) {
+        if (isPrime(i)) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
     // Print strong numbers
-    printf("Strong numbers between %d and %d:\n", num1, num2);
+    printf("The Strong numbers are: ");
     for (int i = num1; i <= num2; i++) {
         if (isStrong(i)) {
             printf("%d ", i);
@@ -44,14 +48,6 @@ int main() {
     }
     printf("\n");
 
-    // Print palindromic numbers
-    printf("Palindromic numbers between %d and %d:\n", num1, num2);
-    for (int i = num1; i <= num2; i++) {
-        if (isPalindrome(i)) {
-            printf("%d ", i);
-        }
-    }
-    printf("\n");
-
+    
     return 0;
 }
