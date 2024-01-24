@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "NumClass.h"
 
+
 int main() {
     int num1, num2;
 
@@ -13,6 +14,7 @@ int main() {
         printf("Please enter positive integers.\n");
         return 1; // Exit with an error code
     }
+
 
     // Print prime numbers
     printf("Prime numbers between %d and %d:\n", num1, num2);

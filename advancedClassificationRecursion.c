@@ -1,30 +1,44 @@
 #include "NumClass.h"
-// Function to check if a number is Armstrong using recursion
-int isArmstrong(int num) {
-    static int originalN = num; 
-    static int sum = 0;
-    if (num != 0) {
-        int digit = num % 10;
-        sum += power(digit, 3); 
-        isArmstrong(num / 10);
+
+// Function to calculate the factorial of a number recursively
+int calculateFactorialRecursively(int num) {
+    return (num == 0) ? 1 : num * calculateFactorialRecursively(num - 1);
+}
+int isArmstrongR(int num) {
+    int originalNum = num;
+    int result = 0;
+    int numDigits = 0;
+
+    // Count the number of digits
+    while (originalNum != 0) {
+        originalNum /= 10;
+        ++numDigits;
+    }
+
+    originalNum = num;
+
+    // Calculate Armstrong sum recursively
+    while (originalNum != 0) {
+        int digit = originalNum % 10;
+        result += calculateFactorialRecursively(digit);
+        originalNum /= 10;
+    }
+
+    return (result == num) ? 1 : 0;
+}
+
+// Helper function for reversing digits recursively
+int reverseRecursively(int num, int reversedNum) {
+    if (num == 0) {
+        return reversedNum;
     } else {
-        int result = (originalN == sum) ? 1 : 0;
-        originalN = sum = 0;
-        return result;
+        return reverseRecursively(num / 10, reversedNum * 10 + num % 10);
     }
 }
 
-// Function to check if a number is a palindrome using recursion
-int isPalindrome(int num) {
-    static int originalN = num; 
-    static int reversedN = 0;
-    if (num != 0) {
-        int digit = num % 10;
-        reversedN = reversedN * 10 + digit;
-        isPalindrome(num / 10);
-    } else {
-        int result = (originalN == reversedN) ? 1 : 0;
-        originalN = reversedN = 0;
-        return result;
-    }
+// Main function for checking palindrome using recursion
+int isPalindromeR(int num) {
+    int reversed = reverseRecursively(num, 0);
+    return (num == reversed);
 }
+
