@@ -1,40 +1,47 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
+CC=gcc
+AR=ar
+OBJECTS_MAIN=main.o
+OBJECTS_LIB_LOOP=basicClassification.o advancedClassificationLoop.o
+OBJECTS_LIB_RECURSION=basicClassification.o advancedClassificationRecursion.o
+FLAGS = -Wall -g
 
-all: loops recursives loopd maindloop maindrec
+.PHONY: clean all
+
+all: loops recursives recursived loopd mains maindloop maindrec
 
 loops: libclassloops.a
+libclassloops.a: $(OBJECTS_LIB_LOOP)
+	$(AR) -rcs libclassloops.a $(OBJECTS_LIB_LOOP)
 
 recursives: libclassrec.a
+libclassrec.a: $(OBJECTS_LIB_RECURSION)
+	$(AR) -rcs libclassrec.a $(OBJECTS_LIB_RECURSION)
 
-loopd: libclassloops.so mains
+recursived: libclassrec.so
+libclassrec.so: $(OBJECTS_LIB_RECURSION)
+	$(CC) -shared -o libclassrec.so $(OBJECTS_LIB_RECURSION)
 
-recursived: libclassrec.so maindloop maindrec
+loopd: libclassloops.so
+libclassloops.so: $(OBJECTS_LIB_LOOP)
+	$(CC) -shared -o libclassloops.so $(OBJECTS_LIB_LOOP)
 
-libclassloops.a: basicClassification.c advancedClassificationLoop.c NumClass.h
-	$(CC) $(CFLAGS) -c basicClassification.c -o basicClassification.o
-	$(CC) $(CFLAGS) -c advancedClassificationLoop.c -o advancedClassificationLoop.o
-	ar rcs libclassloops.a basicClassification.o advancedClassificationLoop.o
+mains: libclassrec.a $(OBJECTS_MAIN)
+	$(CC) $(FLAGS) -o mains $(OBJECTS_MAIN) libclassrec.a
 
-libclassrec.a: basicClassification.c advancedClassificationRecursion.c advancedClassificationLoop.c NumClass.h
-	$(CC) $(CFLAGS) -c basicClassification.c -o basicClassification.o
-	$(CC) $(CFLAGS) -c advancedClassificationRecursion.c -o advancedClassificationRecursion.o
-	ar rcs libclassrec.a basicClassification.o advancedClassificationRecursion.o
+maindloop: $(OBJECTS_MAIN)
+	$(CC) $(FLAGS) -o maindloop $(OBJECTS_MAIN) ./libclassloops.so
 
-libclassloops.so: basicClassification.c advancedClassificationLoop.c NumClass.h
-	$(CC) $(CFLAGS) -fPIC -shared basicClassification.c advancedClassificationLoop.c -o libclassloops.so
+maindrec: $(OBJECTS_MAIN)
+	$(CC) $(FLAGS) -o maindrec $(OBJECTS_MAIN) ./libclassrec.so
 
-libclassrec.so: basicClassification.c advancedClassificationRecursion.c advancedClassificationLoop.c NumClass.h
-	$(CC) $(CFLAGS) -fPIC -shared basicClassification.c advancedClassificationRecursion.c -o libclassrec.so
-
-mains: main.c libclassloops.a
-	$(CC) $(CFLAGS) main.c -L. -lclassloops -o mains
-
-maindloop: main.c libclassloops.so
-	$(CC) $(CFLAGS) main.c -L. -lclassloops -o maindloop
-
-maindrec: main.c libclassrec.so basicClassification.c advancedClassificationRecursion.c advancedClassificationLoop.c NumClass.h
-	$(CC) $(CFLAGS) main.c basicClassification.c advancedClassificationRecursion.c advancedClassificationLoop.c -L. -lclassrec -o maindrec -lclassrec
+main.o: main.c NumClass.h
+	$(CC) $(FLAGS) -c main.c
+basicClassification.o: basicClassification.c NumClass.h
+	$(CC) $(FLAGS) -fPIC -c basicClassification.c
+advancedClassificationLoop.o: advancedClassificationLoop.c NumClass.h
+	$(CC) $(FLAGS) -fPIC -c advancedClassificationLoop.c
+advancedClassificationRecursion.o: advancedClassificationRecursion.c NumClass.h
+	$(CC) $(FLAGS) -fPIC -c advancedClassificationRecursion.c
 
 clean:
 	rm -f *.o *.a *.so mains maindloop maindrec

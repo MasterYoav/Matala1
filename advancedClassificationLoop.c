@@ -9,7 +9,7 @@ int calculateFactorial(int num) {
     return factorial;
 }
 
-int isArmstrong(int num) {
+ int isArmstrong(int num) {
     int originalNum = num;
     int result = 0;
     int numDigits = 0;
@@ -29,7 +29,7 @@ int isArmstrong(int num) {
     return (result == num) ? 1 : 0;
 }
 
-int isPalindrome(int num) {
+ int isPalindrome(int num) {
     int originalNum = num;
     int reversedNum = 0;
 

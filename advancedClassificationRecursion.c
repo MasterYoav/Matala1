@@ -4,7 +4,7 @@
 int calculateFactorialRecursively(int num) {
     return (num == 0) ? 1 : num * calculateFactorialRecursively(num - 1);
 }
-int isArmstrong(int num) {
+ int isArmstrong(int num) {
     int originalNum = num;
     int result = 0;
     int numDigits = 0;
@@ -37,7 +37,7 @@ int reverseRecursively(int num, int reversedNum) {
 }
 
 // Main function for checking palindrome using recursion
-int isPalindrome(int num) {
+ int isPalindrome(int num) {
     int reversed = reverseRecursively(num, 0);
     return (num == reversed);
 }
