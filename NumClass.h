@@ -3,13 +3,8 @@
 
 // Function to check if a number is Armstrong using Loops
 int isArmstrong(int num);
-// Function to check if a number is Armstrong Recursively
-int isArmstrongR(int num);
 
 // Function to check if a number is a palindrome using Loops
-int isPalindrome(int num);
-
-// Function to check if a number is a palindrome Recursively
 int isPalindrome(int num);
 
 // Function to check if a number is prime
