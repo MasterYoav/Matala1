@@ -8,6 +8,7 @@ OBJECTS_LIB_RECURSION=basicClassification.o advancedClassificationRecursion.o
 
 TARGETS=main_loop main_recursion
 
+.PHONY: all clean
 
 all: $(TARGETS)
 
