@@ -3,30 +3,24 @@ CFLAGS=-Wall -g
 LDFLAGS=
 
 OBJECTS_MAIN=main.o
-OBJECTS_LIB_LOOP=basicClassification.o advancedClassificationLoop.o
-OBJECTS_LIB_RECURSION=basicClassification.o advancedClassificationRecursion.o
+OBJECTS_LIB=basicClassification.o advancedClassificationLoop.o
+LIBRARY=libclassloops.a
 
-TARGETS=main_loop main_recursion
+TARGET=main_loop
 
 .PHONY: all clean
 
-all: $(TARGETS)
+all: $(TARGET)
 
-main_loop: $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP) $(LDFLAGS) -lm
+$(TARGET): $(OBJECTS_MAIN) $(LIBRARY)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_MAIN) -L. -lclassloops $(LDFLAGS)
 
-main_recursion: $(OBJECTS_MAIN) $(OBJECTS_LIB_RECURSION)
-	$(CC) $(CFLAGS) -o $@ $(OBJECTS_MAIN) $(OBJECTS_LIB_RECURSION) $(LDFLAGS) -lm
+$(LIBRARY): $(OBJECTS_LIB)
+	$(AR) -rcs $@ $(OBJECTS_LIB)
 
-$(OBJECTS_MAIN): %.o: %.c NumClass.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJECTS_LIB_LOOP): %.o: %.c NumClass.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJECTS_LIB_RECURSION): %.o: %.c NumClass.h
+%.o: %.c NumClass.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGETS) $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP) $(OBJECTS_LIB_RECURSION)
+	rm -f $(TARGET) $(LIBRARY) $(OBJECTS_MAIN) $(OBJECTS_LIB)
 
