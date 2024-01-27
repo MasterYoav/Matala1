@@ -1,47 +1,31 @@
 CC=gcc
-AR=ar
+CFLAGS=-Wall -g
+LDFLAGS=
+
 OBJECTS_MAIN=main.o
 OBJECTS_LIB_LOOP=basicClassification.o advancedClassificationLoop.o
 OBJECTS_LIB_RECURSION=basicClassification.o advancedClassificationRecursion.o
-FLAGS = -Wall -g
 
-.PHONY: clean all
+TARGETS=main_loop main_recursion
 
-all: loops recursives recursived loopd mains maindloop maindrec
 
-loops: libclassloops.a
-libclassloops.a: $(OBJECTS_LIB_LOOP)
-	$(AR) -rcs libclassloops.a $(OBJECTS_LIB_LOOP)
+all: $(TARGETS)
 
-recursives: libclassrec.a
-libclassrec.a: $(OBJECTS_LIB_RECURSION)
-	$(AR) -rcs libclassrec.a $(OBJECTS_LIB_RECURSION)
+main_loop: $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP) $(LDFLAGS) -lm
 
-recursived: libclassrec.so
-libclassrec.so: $(OBJECTS_LIB_RECURSION)
-	$(CC) -shared -o libclassrec.so $(OBJECTS_LIB_RECURSION)
+main_recursion: $(OBJECTS_MAIN) $(OBJECTS_LIB_RECURSION)
+	$(CC) $(CFLAGS) -o $@ $(OBJECTS_MAIN) $(OBJECTS_LIB_RECURSION) $(LDFLAGS) -lm
 
-loopd: libclassloops.so
-libclassloops.so: $(OBJECTS_LIB_LOOP)
-	$(CC) -shared -o libclassloops.so $(OBJECTS_LIB_LOOP)
+$(OBJECTS_MAIN): %.o: %.c NumClass.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-mains: libclassrec.a $(OBJECTS_MAIN)
-	$(CC) $(FLAGS) -o mains $(OBJECTS_MAIN) libclassrec.a
+$(OBJECTS_LIB_LOOP): %.o: %.c NumClass.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-maindloop: $(OBJECTS_MAIN)
-	$(CC) $(FLAGS) -o maindloop $(OBJECTS_MAIN) ./libclassloops.so
-
-maindrec: $(OBJECTS_MAIN)
-	$(CC) $(FLAGS) -o maindrec $(OBJECTS_MAIN) ./libclassrec.so
-
-main.o: main.c NumClass.h
-	$(CC) $(FLAGS) -c main.c
-basicClassification.o: basicClassification.c NumClass.h
-	$(CC) $(FLAGS) -fPIC -c basicClassification.c
-advancedClassificationLoop.o: advancedClassificationLoop.c NumClass.h
-	$(CC) $(FLAGS) -fPIC -c advancedClassificationLoop.c
-advancedClassificationRecursion.o: advancedClassificationRecursion.c NumClass.h
-	$(CC) $(FLAGS) -fPIC -c advancedClassificationRecursion.c
+$(OBJECTS_LIB_RECURSION): %.o: %.c NumClass.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o *.a *.so mains maindloop maindrec
+	rm -f $(TARGETS) $(OBJECTS_MAIN) $(OBJECTS_LIB_LOOP) $(OBJECTS_LIB_RECURSION)
+
